@@ -1,33 +1,51 @@
-/*
-  - document.querySelector('section'); 태그명으로 단수 요소
-  - section.querySelectorAll('article'); 태그명으로 복수 개 요소
-  - section.children; 모든 직계자식
-  - btn.parentElement; 직계부모
-  - btn.closest('section') 조상 요소
-  - btn.previousElementSiblings; 특정 요소의 이전 형제요소
-  - btn.nextElementSiblings; 특정 요소의 다음 형제요소
-  - btn.parentElement.children; 모든 형제요소 
-      (모든 형제요소를 찾는 공식적인 규칙은 없어서, parentElement를 통해 부모로 한 단계 상위로 올라갔다가 children으로 그 부모의 모든 자식을 구하는 것.)
- */
+const btns = document.querySelectorAll('li');
+console.log(btns);
 
-const section = document.querySelector('section');
-const articles = section.querySelectorAll('article');
-const btn = section.querySelector('.btn');
-console.log(articles[2]);
-console.log(section);
-console.log(btn);
-//특정 부모 안에 있는 모든 직계 자식을 선택하고 싶은 경우
-// 자신 기준 부모, 자식 찾는 것
-const childrenEl = section.children;
-const parentEl = btn.parentElement;
-const grandParentEl = btn.closest('section');
-console.log(childrenEl[2]);
-console.log(parentEl);
-console.log(grandParentEl);
-// 자신 기준 형제 찾는 것
-const prevEl = btn.previousElementSibling;
-const nextEl = btn.nextElementSibling;
-const siblings = btn.parentElement.children;
-console.log(prevEl);
-console.log(nextEl);
-console.log(siblings);
+/*
+  DOM (Document object Model) : Web Api
+  : 브라우저가 HTML 태그를 해석해서 렌더링을 할 때, 자바스크립트로 하여금 제어할 수 있도록 객체형태로 만들어주는 API (application programming interface)
+*/
+
+console.dir(btns[0]);
+/*
+이렇게 쓰면 안 됨 (후에 덮어씌워질 수 있음. )
+btns[0].onclick = () => {
+	console.log('엄청 중요한 작업');
+};
+
+btns[0].onclick = () => {
+	console.log('실수로 연결한 쓸 데 없는 작업');
+}; */
+
+// 이벤트 연결할 때에는 addEventListener 쓰는 것이 바람직.
+// 중복 연결할 수 있기 때문에 혹여나 후에 다른 이벤트가 추가되더라도, 기존의 이벤트 내용이 날아가지는 않음.
+/* 
+btns[0].addEventListener('click', () => {
+	console.log('엄청 중요한 작업');
+});
+btns[0].addEventListener('click', () => {
+	console.log('실수로 연결한 쓸 데 없는 작업');
+}); 
+*/
+
+// 재활용하려고 함수로 한 번 더 묶는 건 맞는데,
+// 함수로 재활용하려면 return값이 나와야 하는데
+// 어차피 forEach 자체가 return 값을 주지 않는 특성이므로
+// 한 번 더 묶어줄 필요가 없음.
+// 그리고 내가 쓴 것처럼 btns[index]. 나 선생님이 쓰신 btn. 이나 똑같음 둘 다 가능함.
+const cycle = btns.forEach((data, index) => {
+	btns[index].addEventListener('click', () => {
+		console.log(`button${index + 1}`);
+	});
+});
+
+// 선생님이 알려주신 방식
+btns[0].addEventListener('click', () => {
+	console.log('button1');
+}); // 이 형식이 0, 1, 2 반복되는 거니까
+
+btns.forEach((btn, index) => {
+	btn.addEventListener('click', () => {
+		console.log(`button${index + 1}`);
+	});
+});
